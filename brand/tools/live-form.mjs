@@ -1,0 +1,22 @@
+// Sends one clearly marked test request through the live form: node live-form.mjs <url>
+import puppeteer from 'puppeteer-core';
+const url = process.argv[2];
+const b = await puppeteer.launch({ executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', headless: true });
+const p = await b.newPage();
+const errors = [];
+p.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+p.on('requestfailed', (r) => errors.push('failed: ' + r.url()));
+await p.goto(url, { waitUntil: 'networkidle0' });
+const headers = (await p.goto(url, { waitUntil: 'networkidle0' })).headers();
+console.log('CSP present:', !!headers['content-security-policy'], '| HSTS:', !!headers['strict-transport-security']);
+console.log('logo:', await p.$eval('.brand img', (i) => i.getAttribute('src')));
+await p.type('[name=name]', 'TEST — Claude');
+await p.type('[name=business]', 'TEST (fshijeni / delete me)');
+await p.type('[name=phone]', '+383 44 000 000');
+await p.type('[name=message]', 'Kontroll automatik i formularit pas publikimit.');
+await p.click('[name=consent]');
+await p.click('#contact-form button[type=submit]');
+await new Promise((r) => setTimeout(r, 5000));
+console.log('status:', await p.$eval('.form__status', (e) => e.textContent));
+console.log('errors:', errors);
+await b.close();

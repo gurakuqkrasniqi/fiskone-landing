@@ -18,19 +18,21 @@ mkdirSync(out + 'logos', { recursive: true });
 
 /** "Fisk" + "One" as two outlined paths; returns svg and its box at the given size. */
 function wordmark(size, fisk, one, x = 0, baseline = 0) {
-  const spacing = -0.02 * size;
+  // The font's own spacing and kerning (no extra tightening: "k" and "O" must not touch).
+  const scale = size / font.unitsPerEm;
+  const glyphs = [...'FiskOne'].map((ch) => font.charToGlyph(ch));
   let cursor = x;
   const parts = [];
-  for (const [text, fill] of [['Fisk', fisk], ['One', one]]) {
-    for (const ch of text) {
-      const glyph = font.charToGlyph(ch);
-      const p = glyph.getPath(cursor, baseline, size);
-      parts.push(`<path fill="${fill}" d="${p.toPathData(2)}"/>`);
-      cursor += (glyph.advanceWidth / font.unitsPerEm) * size + spacing;
-    }
-  }
-  const ascent = (font.tables.os2.sCapHeight / font.unitsPerEm) * size;
-  return { svg: parts.join(''), width: cursor - x - spacing, capHeight: ascent };
+  glyphs.forEach((glyph, i) => {
+    const fill = i < 4 ? fisk : one;
+    parts.push(`<path fill="${fill}" d="${glyph.getPath(cursor, baseline, size).toPathData(3)}"/>`);
+    cursor += glyph.advanceWidth * scale;
+    if (i < glyphs.length - 1) cursor += font.getKerningValue(glyph, glyphs[i + 1]) * scale;
+    // A little air where the two words meet ("Fisk" + "One"), so k and O never crowd.
+    if (i === 3) cursor += 0.035 * size;
+  });
+  const capHeight = font.tables.os2.sCapHeight * scale;
+  return { svg: parts.join(''), width: cursor - x, capHeight };
 }
 
 /** The numeral "1" from Manrope, centred in a box. */
@@ -122,6 +124,8 @@ for (const c of concepts) {
   }
   writeFileSync(out + `logos/fiskone-${c.id}-icon.svg`, svg(96, 96, c.icon()));
   writeFileSync(out + `logos/fiskone-${c.id}-mark.svg`, svg(96, 96, c.mark(false)));
+  // For dark backgrounds: the tile in teal so it stays visible on navy.
+  writeFileSync(out + `logos/fiskone-${c.id}-mark-dark.svg`, svg(96, 96, c.mark(true)));
 }
 
 // Preview page: each concept on light and dark, as an app icon, a favicon and a receipt header.

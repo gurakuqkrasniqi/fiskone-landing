@@ -7,3 +7,4 @@ brand/tools/node_modules
 .shots
 firestore-debug.log
 ui-debug.log
+firebase-debug.log

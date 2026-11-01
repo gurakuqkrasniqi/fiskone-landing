@@ -178,9 +178,50 @@ h3 {
   min-height: 68px;
 }
 
-.brand img {
-  width: 150px;
-  height: auto;
+/* Logo: the mark as an image, the name as real text (sharp at every size; the outlined
+   SVG wordmark in public/logo.svg is for places that need an image). */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--navy);
+  text-decoration: none;
+}
+
+.brand__mark {
+  width: 36px;
+  height: 36px;
+  flex: none;
+}
+
+.wordmark {
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.wordmark__one {
+  margin-left: 0.035em;
+  color: var(--teal);
+}
+
+.brand--dark {
+  color: var(--white);
+}
+
+.brand--dark .brand__mark {
+  width: 30px;
+  height: 30px;
+}
+
+.brand--dark .wordmark {
+  font-size: 1.3rem;
+}
+
+.brand--dark .wordmark__one {
+  color: var(--teal-light);
 }
 
 .nav {
@@ -247,8 +288,13 @@ h3 {
     gap: 12px;
   }
 
-  .brand img {
-    width: 120px;
+  .brand__mark {
+    width: 32px;
+    height: 32px;
+  }
+
+  .brand .wordmark {
+    font-size: 1.4rem;
   }
 
   .top__end .btn--small {

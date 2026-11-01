@@ -13,4 +13,5 @@ const to = (name) => new URL(`../public/${name}`, import.meta.url);
 copyFileSync(from('light'), to('logo.svg'));
 copyFileSync(from('dark'), to('logo-dark.svg'));
 copyFileSync(from('icon'), to('icon.svg'));
+copyFileSync(from('mark-dark'), to('icon-dark.svg'));
 console.log(`Logo ${process.argv[2]} (${pick}) is now on the site. Rebuild: npm run build`);
