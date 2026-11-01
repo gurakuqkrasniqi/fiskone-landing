@@ -4,8 +4,15 @@ Single-page site for FiskOne (Albanian, Serbian, English) with a contact form. S
 **Firebase Hosting**; the form saves requests in **Cloud Firestore**. Both are on Firebase's free
 Spark plan.
 
-- `index.html`: the page; the Albanian text is in the HTML (what search engines read).
-- `src/i18n.ts`: Serbian and English texts (same keys as `data-i18n` in the HTML).
+- Pages (one HTML file each, Albanian text in the HTML for search engines): `index.html` (home with the
+  contact form), `vecorite`, `si-funksionon`, `cmimet`, `shkarko`, `ndihma`, `kushtet`, `privatesia`, and
+  the guides `udhezues.html` + `udhezues/*.html`. Firebase serves them at clean URLs (`/cmimet`).
+- `partials/header.html`, `partials/footer.html`: written once, put into every page at build time
+  (`<!--#header-->`, `<!--#footer-->`, see `vite.config.ts`).
+- Guides: edit the articles in `scripts/make-guides.py`, then `python scripts/make-guides.py`.
+- Prices (100 € per business, 30 € per till, per year): `PRICE_BUSINESS` / `PRICE_TILL` in `src/main.ts`
+  and the texts that state them.
+- `src/i18n.ts`, `src/i18n-pages.ts`: Serbian and English texts (same keys as `data-i18n` in the HTML).
 - `src/main.ts`: language switch, form checks, sending to Firestore (loaded only on send).
 - `firestore.rules`: visitors can only **add** a valid request; nobody can read, change or delete
   one from the site. Checked by `tests/rules.test.mjs` (13 cases) against the emulator.
