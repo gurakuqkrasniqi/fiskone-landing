@@ -1,0 +1,9 @@
+node_modules
+dist
+.firebase
+*.log
+.env*
+brand/tools/node_modules
+.shots
+firestore-debug.log
+ui-debug.log

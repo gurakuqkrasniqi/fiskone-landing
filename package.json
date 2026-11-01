@@ -1,0 +1,27 @@
+{
+  "name": "fiskone-landing",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "fiskone.com: single-page site with a contact form (Firebase Hosting + Firestore).",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --port 4173",
+    "deploy": "npm run build && firebase deploy --only hosting,firestore:rules",
+    "test:rules": "firebase emulators:exec --only firestore --project demo-fiskone \"node tests/rules.test.mjs\"",
+    "logo": "node scripts/use-logo.mjs",
+    "images": "node brand/tools/make-pngs.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/manrope": "5.3.0",
+    "firebase": "13.1.0"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2",
+    "vite": "8.3.5"
+  },
+  "overrides": {
+    "@grpc/grpc-js": "1.14.7"
+  }
+}
